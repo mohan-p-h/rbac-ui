@@ -1,9 +1,37 @@
 {
-    "users": [
-      { "id": 1, "name": "John Doe", "email": "john@example.com", "role": "Admin", "status": "Active" }
-    ],
-    "roles": [
-      { "id": 1, "name": "Admin", "permissions": ["Read", "Write", "Delete"] },
-      { "id": 2, "name": "Supervisor", "permissions": ["Read", "Write"] }
-    ]
+  "users": [
+    {
+      "id": "1",
+      "name": "John Doe",
+      "email": "john@example.com",
+      "role": "Admin",
+      "status": "Active"
+    },
+    {
+      "id": "2",
+      "name": "Mohan P H",
+      "email": "mohan@dummymail.com",
+      "role": "Supervisor",
+      "status": "Active"
+    }
+  ],
+  "roles": [
+    {
+      "id": "1",
+      "name": "Admin",
+      "permissions": [
+        "Read",
+        "Write",
+        "Delete"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Supervisor",
+      "permissions": [
+        "Read",
+        "Write"
+      ]
+    }
+  ]
 }
