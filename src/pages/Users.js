@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Button, Dialog, DialogActions, DialogContent,
+   DialogTitle, TextField, MenuItem } from "@mui/material";
 import axios from "axios";
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+// import AddEditUser from "../components/AddEditUser";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", role: "", status: "Active" });
   const [editingUser, setEditingUser] = useState(null);
+  const [roles, setRoles] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     fetchUsers();
+    fetchRoles();
   }, []);
 
   const fetchUsers = async () => {
@@ -19,28 +24,70 @@ const Users = () => {
     setUsers(response.data);
   };
 
+  const fetchRoles = async () => {
+    const response = await axios.get("http://localhost:5000/roles");
+    setRoles(response.data);
+  };
+
   const handleOpen = (user = null) => {
     setEditingUser(user);
     setFormData(user || { name: "", email: "", role: "", status: "Active" });
+    setErrors({});
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
     setFormData({ name: "", email: "", role: "", status: "Active" });
+    setErrors({});
+  };
+
+  // const handleChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
+
+  const validateForm = () => {
+    let validationErrors = {};
+
+    if (!formData.name.trim()) {
+      validationErrors.name = "Name is required.";
+    }
+
+    if (!formData.email.trim()) {
+      validationErrors.email = "Email is required.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      validationErrors.email = "Enter a valid email address.";
+    }
+
+    if (!formData.role) {
+      validationErrors.role = "Role is required.";
+    }
+
+    if (!formData.status) {
+      validationErrors.status = "Status is required.";
+    }
+
+    setErrors(validationErrors);
+    return Object.keys(validationErrors).length === 0;
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value, // Retain existing values and update the changed field
+    }));
   };
 
   const handleSubmit = async () => {
+    if (!validateForm()) return;
+
     if (editingUser) {
       // Update existing user
       await axios.put(`http://localhost:5000/users/${editingUser.id}`, formData);
     } else {
       // Add new user
-      await axios.post("http://localhost:5000/users", { ...formData, id: users.length + 1 });
+      await axios.post("http://localhost:5000/users", { ...formData, id: (users.length + 1).toString() });
     }
     fetchUsers();
     handleClose();
@@ -142,38 +189,24 @@ const Users = () => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{editingUser ? "Edit User" : "Add User"}</DialogTitle>
         <DialogContent>
-          <TextField
-            label="Name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Role"
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Status"
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
+          <TextField label="Name" name="name" value={formData.name} onChange={handleChange} fullWidth margin="normal"
+           error={!!errors.name} helperText={errors.name} />
+
+          <TextField label="Email" name="email" value={formData.email} onChange={handleChange} fullWidth margin="normal"
+           error={!!errors.email} helperText={errors.email} />
+
+          <TextField label="Role" variant="outlined" name="role" select fullWidth margin="normal" value={formData.role} onChange={handleChange}
+            error={!!errors.role} helperText={errors.role}>
+            {roles.map((r) => (
+              <MenuItem key={r.id} value={r.name}>
+                {r.name}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <TextField label="Status" name="status" value={formData.status} onChange={handleChange} fullWidth margin="normal"
+            error={!!errors.status} helperText={errors.status} />
+            
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="secondary">

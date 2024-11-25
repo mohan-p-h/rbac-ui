@@ -2,16 +2,30 @@
   "users": [
     {
       "id": "1",
-      "name": "John Doe",
-      "email": "john@example.com",
+      "name": "Mohan",
+      "email": "mohan@example.com",
       "role": "Admin",
       "status": "Active"
     },
     {
       "id": "2",
-      "name": "Mohan P H",
-      "email": "mohan@dummymail.com",
+      "name": "Pruthvi",
+      "email": "pruthvi@dummymail.com",
+      "role": "Manager",
+      "status": "Active"
+    },
+    {
+      "id": "3",
+      "name": "Sheetal Patil",
+      "email": "sheetal@fhgdfd.com",
       "role": "Supervisor",
+      "status": "Active"
+    },
+    {
+      "id": "4",
+      "name": "hfhf",
+      "email": "ygygy@gmail.com",
+      "role": "Admin",
       "status": "Active"
     }
   ],
@@ -20,18 +34,61 @@
       "id": "1",
       "name": "Admin",
       "permissions": [
-        "Read",
-        "Write",
+        "Add",
+        "Edit",
+        "View",
         "Delete"
       ]
     },
     {
       "id": "2",
+      "name": "Manager",
+      "permissions": [
+        "Edit",
+        "View"
+      ]
+    },
+    {
+      "id": "3",
       "name": "Supervisor",
       "permissions": [
-        "Read",
-        "Write"
+        "View"
       ]
+    },
+    {
+      "id": 4,
+      "name": "ftgffgfh",
+      "permissions": [
+        "jgjgyj"
+      ]
+    }
+  ],
+  "permissions": [
+    {
+      "id": "1",
+      "name": "Add"
+    },
+    {
+      "id": "2",
+      "name": "Edit"
+    },
+    {
+      "id": "3",
+      "name": "View"
+    },
+    {
+      "id": "4",
+      "name": "Delete"
+    }
+  ],
+  "status": [
+    {
+      "id": "1",
+      "status_name": "Active"
+    },
+    {
+      "id": "1",
+      "status_name": "Inactive"
     }
   ]
 }
