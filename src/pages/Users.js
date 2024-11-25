@@ -13,10 +13,14 @@ const Users = () => {
   const [editingUser, setEditingUser] = useState(null);
   const [roles, setRoles] = useState([]);
   const [errors, setErrors] = useState({});
+  const [statuses, setStatuses] = useState([]);
+  const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
     fetchUsers();
     fetchRoles();
+    fetchStatuses();
+    fetchPermissions();
   }, []);
 
   const fetchUsers = async () => {
@@ -27,6 +31,16 @@ const Users = () => {
   const fetchRoles = async () => {
     const response = await axios.get("http://localhost:5000/roles");
     setRoles(response.data);
+  };
+
+  const fetchStatuses = async () => {
+    const response = await axios.get("http://localhost:5000/statuses");
+    setStatuses(response.data);
+  };
+
+  const fetchPermissions = async () => {
+    const response = await axios.get("http://localhost:5000/permissions");
+    setPermissions(response.data);
   };
 
   const handleOpen = (user = null) => {
@@ -40,6 +54,12 @@ const Users = () => {
     setOpen(false);
     setFormData({ name: "", email: "", role: "", status: "Active" });
     setErrors({});
+  };
+
+  const getPermissionsByRole = (roleName) => {
+    const role = roles.find((r) => r.name === roleName);
+    if (!role) return [];
+    return permissions.filter((p) => role.permissions.includes(p.id));
   };
 
   // const handleChange = (e) => {
@@ -142,6 +162,7 @@ const Users = () => {
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell>Email</StyledTableCell>
               <StyledTableCell>Role</StyledTableCell>
+              <StyledTableCell>Permissions</StyledTableCell>
               <StyledTableCell>Status</StyledTableCell>
               <StyledTableCell>Actions</StyledTableCell>
             </TableRow>
@@ -170,6 +191,11 @@ const Users = () => {
               <StyledTableCell>{user.name}</StyledTableCell>
               <StyledTableCell>{user.email}</StyledTableCell>
               <StyledTableCell>{user.role}</StyledTableCell>
+              <StyledTableCell>
+                {getPermissionsByRole(user.role)
+                  .map((permission) => permission.name)
+                  .join(", ")}
+              </StyledTableCell>
               <StyledTableCell>{user.status}</StyledTableCell>
               <StyledTableCell>
                 <Button variant="outlined" color="primary" size="small" onClick={() => handleOpen(user)}>
@@ -204,9 +230,27 @@ const Users = () => {
             ))}
           </TextField>
 
-          <TextField label="Status" name="status" value={formData.status} onChange={handleChange} fullWidth margin="normal"
-            error={!!errors.status} helperText={errors.status} />
-            
+          {/* <TextField label="Status" name="status" value={formData.status} onChange={handleChange} fullWidth margin="normal"
+            error={!!errors.status} helperText={errors.status} /> */}
+
+          <TextField
+            label="Status"
+            name="status"
+            select
+            fullWidth
+            margin="normal"
+            value={formData.status}
+            onChange={handleChange}
+            error={!!errors.status}
+            helperText={errors.status}
+          >
+            {statuses.map((status) => (
+              <MenuItem key={status.id} value={status.status_name}>
+                {status.status_name}
+              </MenuItem>
+            ))}
+          </TextField>
+
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="secondary">

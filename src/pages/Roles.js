@@ -7,12 +7,13 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
 const Roles = () => {
   const [roles, setRoles] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: "", permissions: [] });
-  const [editingRole, setEditingRole] = useState(null);
+  const [roleDialogOpen, setRoleDialogOpen] = useState(false);
+  const [roleData, setRoleData] = useState({ name: "", permissions: [] });
+  const [permissions, setPermissions] = useState([]);
 
   useEffect(() => {
     fetchRoles();
+    fetchPermissions();
   }, []);
 
   const fetchRoles = async () => {
@@ -20,29 +21,62 @@ const Roles = () => {
     setRoles(response.data);
   };
 
-  const handleOpen = (role = null) => {
-    setEditingRole(role);
-    setFormData(role || { name: "", permissions: [] });
-    setOpen(true);
+  const fetchPermissions = async () => {
+    const response = await axios.get("http://localhost:5000/permissions");
+    setPermissions(response.data);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-    setFormData({ name: "", permissions: [] });
-  };
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async () => {
-    if (editingRole) {
-      await axios.put(`http://localhost:5000/roles/${editingRole.id}`, formData);
+  const handleRoleDialogOpen = (role = null) => {
+    if (role) {
+      setRoleData({
+        id: role.id,
+        name: role.name,
+        permissions: role.permissions,
+      });
     } else {
-      await axios.post("http://localhost:5000/roles", { ...formData, id: roles.length + 1 });
+      setRoleData({ name: "", permissions: [] });
+    }
+    setRoleDialogOpen(true);
+  };
+
+  const handleRoleDialogClose = () => {
+    setRoleDialogOpen(false);
+  };
+
+  const handleRoleChange = (e) => {
+    const { name, value } = e.target;
+    setRoleData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // const handlePermissionToggle = (permissionId) => {
+  //   setRoleData((prev) => ({
+  //     ...prev,
+  //     permissions: prev.permissions.includes(permissionId)
+  //       ? prev.permissions.filter((id) => id !== permissionId)
+  //       : [...prev.permissions, permissionId],
+  //   }));
+  // };
+
+  const handlePermissionToggle = (permissionId) => {
+    setRoleData((prev) => ({
+      ...prev,
+      permissions: prev.permissions.includes(permissionId)
+        ? prev.permissions.filter((id) => id !== permissionId) // Remove if already selected
+        : [...prev.permissions, permissionId], // Add if not selected
+    }));
+  };
+
+  const handleRoleSubmit = async () => {
+    if (roleData.id) {
+      await axios.put(`http://localhost:5000/roles/${roleData.id}`, roleData);
+    } else {
+      await axios.post("http://localhost:5000/roles", {
+        ...roleData,
+        id: (roles.length + 1).toString(),
+      });
     }
     fetchRoles();
-    handleClose();
+    handleRoleDialogClose();
   };
 
   const handleDelete = async (id) => {
@@ -61,21 +95,24 @@ const Roles = () => {
       fontSize: 14,
     },
   }));
-  
+
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
+    "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
     },
-    // hide last border
-    '&:last-child td, &:last-child th': {
+    "&:last-child td, &:last-child th": {
       border: 0,
     },
   }));
 
-
   return (
     <div>
-      <Button variant="contained" color="primary" onClick={() => handleOpen()} style={{ marginBottom: "10px" }}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleRoleDialogOpen()}
+        style={{ marginBottom: "10px" }}
+      >
         Add Role
       </Button>
       <TableContainer component={Paper}>
@@ -93,9 +130,19 @@ const Roles = () => {
               <StyledTableRow key={role.id}>
                 <StyledTableCell>{role.id}</StyledTableCell>
                 <StyledTableCell>{role.name}</StyledTableCell>
-                <StyledTableCell>{role.permissions.join(", ")}</StyledTableCell>
                 <StyledTableCell>
-                  <Button variant="outlined" color="primary" size="small" onClick={() => handleOpen(role)}>
+                  {permissions
+                    .filter((perm) => role.permissions.includes(perm.id))
+                    .map((perm) => perm.name)
+                    .join(", ")}
+                </StyledTableCell>
+                <StyledTableCell>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    onClick={() => handleRoleDialogOpen(role)}
+                  >
                     Edit
                   </Button>
                   <Button
@@ -114,34 +161,38 @@ const Roles = () => {
         </Table>
       </TableContainer>
 
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{editingRole ? "Edit Role" : "Add Role"}</DialogTitle>
+      <Dialog open={roleDialogOpen} onClose={handleRoleDialogClose}>
+        <DialogTitle>{roleData.id ? "Edit Role" : "Create Role"}</DialogTitle>
         <DialogContent>
           <TextField
             label="Role Name"
             name="name"
-            value={formData.name}
-            onChange={handleChange}
+            value={roleData.name}
+            onChange={handleRoleChange}
             fullWidth
             margin="normal"
           />
-          <TextField
-            label="Permissions (comma-separated)"
-            name="permissions"
-            value={formData.permissions}
-            onChange={(e) =>
-              setFormData({ ...formData, permissions: e.target.value.split(",").map((perm) => perm.trim()) })
-            }
-            fullWidth
-            margin="normal"
-          />
+          <div>
+            {permissions.map((permission) => (
+              <div key={permission.id}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={roleData.permissions.includes(permission.id)} // Controlled by roleData.permissions
+                    onChange={() => handlePermissionToggle(permission.id)}
+                  />
+                  {permission.name}
+                </label>
+              </div>
+            ))}
+          </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary">
+          <Button onClick={handleRoleDialogClose} color="secondary">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary">
-            {editingRole ? "Update" : "Add"}
+          <Button onClick={handleRoleSubmit} color="primary">
+            Save
           </Button>
         </DialogActions>
       </Dialog>
