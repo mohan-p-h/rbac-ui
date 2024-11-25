@@ -20,13 +20,6 @@
       "email": "sheetal@fhgdfd.com",
       "role": "Supervisor",
       "status": "Active"
-    },
-    {
-      "id": "4",
-      "name": "hfhf",
-      "email": "ygygy@gmail.com",
-      "role": "Admin",
-      "status": "Active"
     }
   ],
   "roles": [
@@ -34,32 +27,30 @@
       "id": "1",
       "name": "Admin",
       "permissions": [
-        "Add",
-        "Edit",
-        "View",
-        "Delete"
+        1,
+        2,
+        3,
+        4,
+        "1",
+        "2",
+        "3",
+        "4"
       ]
     },
     {
       "id": "2",
       "name": "Manager",
       "permissions": [
-        "Edit",
-        "View"
+        1,
+        "2",
+        "3"
       ]
     },
     {
       "id": "3",
       "name": "Supervisor",
       "permissions": [
-        "View"
-      ]
-    },
-    {
-      "id": 4,
-      "name": "ftgffgfh",
-      "permissions": [
-        "jgjgyj"
+        "3"
       ]
     }
   ],
@@ -81,13 +72,13 @@
       "name": "Delete"
     }
   ],
-  "status": [
+  "statuses": [
     {
       "id": "1",
       "status_name": "Active"
     },
     {
-      "id": "1",
+      "id": "2",
       "status_name": "Inactive"
     }
   ]
