@@ -3,7 +3,7 @@ import { Typography, Box } from "@mui/material";
 
 const Home = () => {
   return (
-    <Box sx={{ padding: 2 }}>
+    <Box sx={{ padding: 2, boxShadow: 3 }}>
       <Typography variant="h4" gutterBottom>
         Welcome to the Admin Dashboard
       </Typography>

@@ -150,14 +150,6 @@ const Users = () => {
         <Table>
           <TableHead>
             <TableRow>
-              
-              {/* <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Actions</TableCell> */}
-
               <StyledTableCell>ID</StyledTableCell>
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell>Email</StyledTableCell>
@@ -169,23 +161,6 @@ const Users = () => {
           </TableHead>
           <TableBody>
             {users.map((user) => (
-
-              // <TableRow key={user.id}>
-              //   <TableCell>{user.id}</TableCell>
-              //   <TableCell>{user.name}</TableCell>
-              //   <TableCell>{user.email}</TableCell>
-              //   <TableCell>{user.role}</TableCell>
-              //   <TableCell>{user.status}</TableCell>
-              //   <TableCell>
-              //     <Button variant="outlined" color="primary" size="small">
-              //       Edit
-              //     </Button>
-              //     <Button variant="outlined" color="secondary" size="small" style={{ marginLeft: 10 }}>
-              //       Delete
-              //     </Button>
-              //   </TableCell>
-              // </TableRow>
-
               <StyledTableRow key={user.id}>
               <StyledTableCell>{user.id}</StyledTableCell>
               <StyledTableCell>{user.name}</StyledTableCell>
@@ -212,7 +187,7 @@ const Users = () => {
       </TableContainer>
 
       {/* Add/Edit Dialog */}
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog maxWidth="sm" open={open} onClose={handleClose}>
         <DialogTitle>{editingUser ? "Edit User" : "Add User"}</DialogTitle>
         <DialogContent>
           <TextField label="Name" name="name" value={formData.name} onChange={handleChange} fullWidth margin="normal"
@@ -229,9 +204,6 @@ const Users = () => {
               </MenuItem>
             ))}
           </TextField>
-
-          {/* <TextField label="Status" name="status" value={formData.status} onChange={handleChange} fullWidth margin="normal"
-            error={!!errors.status} helperText={errors.status} /> */}
 
           <TextField
             label="Status"

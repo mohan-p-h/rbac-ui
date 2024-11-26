@@ -1,70 +1,56 @@
-# Getting Started with Create React App
+`RBAC UI (Role-Based Access Control UI)`
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview:
+This project provides a user interface for managing roles and permissions within a system using a Role-Based Access Control (RBAC) model. It allows administrators to create, view, edit, and delete roles, as well as assign permissions to each role. Users can be assigned specific roles that control their access to various resources within the application.
 
-## Available Scripts
+## Features:
+Roles Management: Add, edit, and delete roles.
+Permissions Management: View, create, and delete permissions.
+Assign Permissions to Roles: Select permissions when creating or editing roles.
+Responsive UI: The application is fully responsive, ensuring a smooth experience on desktop and mobile devices.
 
-In the project directory, you can run:
+## Tech Stack:
+Frontend         : React.js
+UI Library       : Material-UI (MUI)
+State Management : React useState, useEffect hooks
+API Requests     : Axios
+Backend (Mock)   : JSON Server (mocking data storage)
+Routing          : React Router
+CSS Framework    : Custom CSS with MUI's Box, Table, Dialog and Grid components for responsive layouts
 
-### `npm start`
+## Installation Steps:
+Follow the steps below to get the project up and running locally:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. Clone the repository:
+# git clone https://github.com/your-username/rbac-ui.git
+# cd rbac-ui
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. Install dependencies:
+Make sure you have Node.js installed on your machine. You can check if you have it installed by running:
+node -v
+npm -v
 
-### `npm test`
+Then install the project dependencies using npm:
+# npm install
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. Install JSON Server (for mocking API):
+Install json-server globally (if you haven't already):
+# npm install -g json-server
 
-### `npm run build`
+Then, run the json-server using the db.json file provided in the project:
+# json-server --watch db.json --port 5000
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+(run this command from the root folder of application)
+The mock backend will be available at http://localhost:5000.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## How to Run the application:
+1. Run the React App:
+After installing the dependencies, start the development server to run the React app:
+# npm start
 
-### `npm run eject`
+This will start the React application on http://localhost:3000. Your UI will be live and can interact with the mock API at http://localhost:5000 (via JSON Server).
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2. Access the App:
+Open a web browser and go to http://localhost:3000 to see the Role-Based Access Control UI in action.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

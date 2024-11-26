@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const NavigationBar = () => {
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{borderRadius: 2, marginBottom: 1 }} >
       <Toolbar>
         <Typography variant="h4" component="div" sx={{ flexGrow: 1 }} >
           Admin
