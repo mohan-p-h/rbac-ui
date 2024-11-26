@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { List, ListItem, ListItemText, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Paper } from "@mui/material";
+import { Typography, Box, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Paper } from "@mui/material";
 import axios from "axios";
+// import Grid from '@mui/material/Grid';
 
 const Permissions = () => {
   const [permissions, setPermissions] = useState([]);
@@ -13,7 +14,6 @@ const Permissions = () => {
 
   const fetchPermissions = async () => {
     const response = await axios.get("http://localhost:5000/permissions");
-    console.log("FetchData Permission ",response.data);
     setPermissions(response.data);
   };
 
@@ -41,26 +41,38 @@ const Permissions = () => {
   };
 
   return (
-    <Paper style={{ padding: 20 }}>
-      <h2>Permissions</h2>
-      <Button variant="contained" color="primary" onClick={() => setOpen(true)} style={{ marginBottom: "10px" }}>
+    <Box padding={2}>
+      <Typography variant="h4" gutterBottom>
+        Permissions
+      </Typography>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => setOpen(true)}
+        style={{ marginBottom: "20px" }}
+      >
         Create New Permission
       </Button>
-      <List>
-        {permissions.map((permission) => (
-          <ListItem
-            key={permission.id}
-            secondaryAction={
-              <Button variant="outlined" color="secondary" size="small" onClick={() => handleDelete(permission.id)} >
-                Delete
-              </Button>
-            } >
-            <ListItemText primary={permission.name} />
-          </ListItem>
-        ))}
-      </List>
 
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Box display="flex" flexWrap="wrap" gap={3} sx={{ padding: 3 }} >
+        {permissions.map((permission) => (
+          <Box key={permission.id} sx={{ flex: "1 1 calc(33.333% - 24px)", maxWidth: "calc(33.333% - 24px)", boxSizing: "border-box", }} >
+            <Paper elevation={3}>
+              <Box padding={2}>
+                <Typography variant="h6">{permission.name}</Typography>
+                <Box mt={2}>
+                  <Button variant="outlined" color="secondary" size="small" onClick={() => handleDelete(permission.id)} >
+                    Delete
+                  </Button>
+                </Box>
+              </Box>
+            </Paper>
+          </Box>
+        ))}
+      </Box>
+
+      {/* Dialog for adding new permission */}
+      <Dialog maxWidth="sm" open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Add Permission</DialogTitle>
         <DialogContent>
           <TextField
@@ -80,7 +92,7 @@ const Permissions = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </Paper>
+    </Box>
   );
 };
 

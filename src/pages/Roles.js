@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Button, Dialog, DialogActions,
-   DialogContent, DialogTitle, TextField } from "@mui/material";
+   DialogContent, DialogTitle, TextField, Typography, Box, Checkbox } from "@mui/material";
 import axios from "axios";
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+// import Grid from '@mui/material/Grid';
 
 const Roles = () => {
   const [roles, setRoles] = useState([]);
@@ -161,31 +162,24 @@ const Roles = () => {
         </Table>
       </TableContainer>
 
-      <Dialog open={roleDialogOpen} onClose={handleRoleDialogClose}>
+      <Dialog fullWidth maxWidth="sm" open={roleDialogOpen} onClose={handleRoleDialogClose}>
         <DialogTitle>{roleData.id ? "Edit Role" : "Create Role"}</DialogTitle>
         <DialogContent>
-          <TextField
-            label="Role Name"
-            name="name"
-            value={roleData.name}
-            onChange={handleRoleChange}
-            fullWidth
-            margin="normal"
-          />
-          <div>
+          <TextField label="Role Name" name="name" value={roleData.name} onChange={handleRoleChange} fullWidth margin="normal" />
+          <Typography variant="body1">Select Permissions for this role:</Typography>
+
+          <Box className="selectPermissions" sx={{ display: "flex", flexWrap: "wrap", gap: 2, padding: 2 }} >
             {permissions.map((permission) => (
-              <div key={permission.id}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={roleData.permissions.includes(permission.id)} // Controlled by roleData.permissions
-                    onChange={() => handlePermissionToggle(permission.id)}
-                  />
-                  {permission.name}
-                </label>
-              </div>
+              <Box key={permission.id} sx={{ display: "flex", alignItems: "center", flex: "1 1 calc(33.333% - 16px)", maxWidth: "33.333%", }} >
+                <Checkbox
+                  checked={roleData.permissions.includes(permission.id)}
+                  onChange={() => handlePermissionToggle(permission.id)}
+                />
+                <Typography variant="body1">{permission.name}</Typography>
+              </Box>
             ))}
-          </div>
+          </Box>
+
         </DialogContent>
         <DialogActions>
           <Button onClick={handleRoleDialogClose} color="secondary">
